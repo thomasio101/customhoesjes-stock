@@ -223,7 +223,7 @@ class ProductsResource(Resource):
             field: getattr(product, field) for field in product_fields
             }, 201
         except ValueError as e:
-            return None, 404
+            return None, 409
 
 from flask import Flask
 from flask_restful import Api
@@ -233,6 +233,22 @@ api = Api(app)
 
 api.add_resource(ProductResource, '/product/<int:id>')
 api.add_resource(ProductsResource, '/product')
+
+@app.route('/')
+def host_index():
+    with open('index.html') as index:
+        return index.read()
+
+@app.route('/main.js')
+def host_main_js():
+    with open('main.js') as main_js:
+        return main_js.read()
+
+from flask import render_template
+
+@app.route('/add-product')
+def host_add_product():
+    return render_template('add-product.html', fields=product_fields)
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)

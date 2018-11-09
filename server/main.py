@@ -177,3 +177,62 @@ for field in product_fields:
         get_field_getter(field),
         get_field_setter(field)
         ))
+
+from flask import request
+from flask_restful import Resource
+
+class ProductResource(Resource):
+    def get(self, id):
+        try:
+            product = Product(id)
+            return {
+            field: getattr(product, field) for field in product_fields
+            }
+        except ValueError:
+            return None, 404
+
+    def put(self, id):
+        try:
+            product = Product(id)
+            for key in request.form:
+                setattr(product, key, request.form[key])
+            return {
+            field: getattr(product, field) for field in product_fields
+            }, 202
+        except ValueError as e:
+            return None, 404
+
+    def delete(self, id):
+        try:
+            Product(id).delete()
+            return None, 204
+        except ValueError as e:
+            return None, 404
+
+class ProductsResource(Resource):
+    def get(self):
+        return [
+        {
+        field: getattr(product, field) for field in product_fields
+        } for product in Product.all
+        ]
+    def post(self):
+        try:
+            product = Product(*request.form.values())
+            return {
+            field: getattr(product, field) for field in product_fields
+            }, 201
+        except ValueError as e:
+            return None, 404
+
+from flask import Flask
+from flask_restful import Api
+
+app = Flask(__name__)
+api = Api(app)
+
+api.add_resource(ProductResource, '/product/<int:id>')
+api.add_resource(ProductsResource, '/product')
+
+if __name__ == '__main__':
+    app.run(threaded=True, debug=True)

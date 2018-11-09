@@ -39,7 +39,7 @@ class Product(metaclass=ProductMeta):
             try:
                 self.id = int(args[0])
             except ValueError:
-                raise ValueError("The provided id has to be an int!")
+                raise TypeError("The provided id has to be an int!")
             else:
                 ## Check if a product exists with the provided id
                 try:
@@ -62,7 +62,7 @@ class Product(metaclass=ProductMeta):
             try:
                 self.id = int(args[0])
             except ValueError:
-                raise ValueError("The provided id has to be an int!")
+                raise TypeError("The provided id has to be an int!")
             else:
                 try:
                     connection = get_db_connection()
@@ -90,6 +90,31 @@ class Product(metaclass=ProductMeta):
                         raise e
         else:
             raise ValueError("expected 1 or {} arguments, got {}".format(len(product_fields), arg_count))
+
+    def delete(self):
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+
+            cursor.execute(
+            "SELECT 1 FROM products WHERE id=%s;",
+            (self.id,)
+            )
+
+            if not cursor.fetchall():
+                raise ValueError("There is no product with the provided id!\rAre you trying to access a deleted product?")
+            else:
+                cursor.execute(
+                "DELETE FROM products WHERE id = %s;",
+                (self.id,)
+                )
+
+                connection.commit()
+        finally:
+            try:
+                connection.close()
+            except e:
+                raise e
 
 def get_field_getter(field):
     def field_getter(self):

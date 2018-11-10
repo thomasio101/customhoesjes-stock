@@ -252,7 +252,7 @@ def host_update_product(id):
     try:
         return render_template('input.html', fields=Product.fields, method='put', getattr=getattr, product=Product(id))
     except ValueError as e:
-        return None, 404
+        return str(e), 404
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)

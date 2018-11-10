@@ -3,59 +3,42 @@
   <head>
     <meta charset="utf-8">
     <title>Customhoesjes Voorraad</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   </head>
   <body>
-    <form>
-      <b>Pagina: </b>
-      <input name="page" type="number" value="{{ page }}"/><br/>
-      <b>Producten per pagina: </b>
-      <input name="products-per-page" type="number" value="{{ products_per_page }}"/><br/>
-      <input type="submit"/>
-    </form>
-    <form id="id-form">
-      <b>ID:</b><br/>
-      <input id="id-input" type="text"/>
-      <input type="submit"/>
-    </form>
-    <div align="center">
-      {% if page != 1 %}
-      <form>
-        <input hidden name="page" value="{{ page - 1 }}"/>
-        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
-        <input type="submit" value="Vorige"/>
-      </form>
-      {% endif %}
-      <form>
-        <input hidden name="page" value="{{ page + 1 }}"/>
-        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
-        <input type="submit" value="Volgende"/>
-      </form>
-    </div>
-    <ul>
+    <div class="container">
+      {% include 'top-bar.html' %}
       {% for product in products %}
-      <li>
-        {% for field in fields %}
-        <b>{{ field }}</b> {{ getattr(product, field) }}<br/>
-        {% endfor %}
-      </li>
+      {% include 'product-card.html' %}
       {% endfor %}
-    </ul>
-    <div align="center">
-      {% if page != 1 %}
-      <form>
-        <input hidden name="page" value="{{ page - 1 }}"/>
-        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
-        <input type="submit" value="Vorige"/>
-      </form>
-      {% endif %}
-      <form>
-        <input hidden name="page" value="{{ page + 1 }}"/>
-        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
-        <input type="submit" value="Volgende"/>
-      </form>
+      {% include 'bottom-bar.html' %}
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script>
+    const page = {{ page }}
+    const productsPerPage = {{ products_per_page }}
+    const query = '{{ query.replace("\'", "\\\'") }}'
+    </script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <!-- <script>
+    async function onDeleteButtonClick(buttonClickEvent) {
+      const id = $(this).data()['product']
+      const name = $(this).parent().parent().children().first().children().first().text()
+      if(confirm(
+        `Weet je zeker dat je\r"${ name }"\r wilt verwijderen?`)
+      ) {
+        await $.ajax(
+          {
+            url: `/product/${ id }`,
+            method: 'DELETE'
+          }
+        )
+        location.reload()
+      }
+    }
+
     $(document).ready(
       (documentReadyEvent) => {
         $('#id-input').val(null)
@@ -66,8 +49,12 @@
             window.location.href = `/product/${ id }/update`
           }
         )
+
+        $('.product-delete-button').click(
+          onDeleteButtonClick
+        )
       }
     )
-    </script>
+    </script> -->
   </body>
 </html>

@@ -1,0 +1,35 @@
+<div class="row my-3">
+  <div class="col-4">
+    <div class="input-group">
+      <input type="text" id="id-input" class="form-control" placeholder="ID">
+      <div class="input-group-append">
+        <button id="go-to-product-button" class="btn btn-primary">Naar product</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-4" align="center">
+    {% include 'previous-next-buttons.html' %}
+  </div>
+  <div class="col-4" align="right">
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#advanced-search-options">Geadvanceerd zoeken</button>
+  </div>
+</div>
+<div class="row my-3">
+  <div class="col-4">
+    <div class="input-group">
+      <input type="text" id="search-input" class="form-control" placeholder="Zoektermen">
+      <div class="input-group-append">
+        <button id="search-button" class="btn btn-primary">Zoeken</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-8" align="right">
+    <div id="advanced-search-options" class="collapse">
+      <div class="card">
+        <div class="card-body pb-0">
+          {% include 'advanced-search-options.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

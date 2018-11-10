@@ -1,0 +1,21 @@
+<form>
+  <div class="row">
+    <div class="col-5">
+      <label for="page-input" class="float-left">Pagina</label>
+    </div>
+    <div class="col-5">
+      <label for="products-per-page-input" class="float-left">Producten per pagina</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-5">
+      <input class="form-control" id="page-input" name="page" type="number" value="{{ page }}"/><br/>
+    </div>
+    <div class="col-5">
+      <input class="form-control" id="products-per-page-input" name="products-per-page" type="number" value="{{ products_per_page }}"/><br/>
+    </div>
+    <div class="col-2">
+      <button type="submit" class="btn btn-primary">Instellen</button>
+    </div>
+  </div>
+</form>

@@ -254,8 +254,20 @@ from flask import render_template
 
 @app.route('/')
 def host_index():
-    page = int(request.args['page'])
-    products_per_page = int(request.args['products-per-page'])
+    if 'query' in request.args:
+        query = request.args['query']
+    else:
+        query = ''
+
+    if 'page' in request.args:
+        page = int(request.args['page'])
+    else:
+        page = 1
+
+    if 'products-per-page' in request.args:
+        products_per_page = int(request.args['products-per-page'])
+    else:
+        products_per_page = 10
 
     products_on_page = []
 
@@ -265,7 +277,7 @@ def host_index():
         elif i >= page * products_per_page:
             break
 
-    return render_template('index.html', page=page, products_per_page=products_per_page, getattr=getattr, products=products_on_page, fields=Product.fields)
+    return render_template('index.html', page=page, products_per_page=products_per_page, query=query, getattr=getattr, products=products_on_page, fields=Product.fields)
 
 @app.route('/add-product')
 def host_add_product():

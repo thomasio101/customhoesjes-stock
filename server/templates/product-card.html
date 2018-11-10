@@ -1,0 +1,33 @@
+{# Put all special fields here, these fields will not be included in the list. #}
+{% set special_fields = ['name', 'id', 'description'] %}
+{# Put all field synonyms here, these can be used as human-readable versions of field names. #}
+{% set field_synonyms = {'internal_id':'Internal ID'} %}
+<div class="row my-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ product.id }}</h6>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          {% for field in fields %}
+          {% if field not in special_fields %}
+          <b>
+            {% if field in field_synonyms %}
+            {{ field_synonyms[field] }}
+            {% else %}
+            {{ field[0].upper() + field[1::] }}
+            {% endif %}
+          </b> {{ getattr(product, field) }}<br/>
+          {% endif %}
+          {% endfor %}
+        </li>
+      </ul>
+      <div class="card-body">
+        <button class="btn btn-secondary btn-sm" href="{{ url_for('host_update_product', id=product.id) }}">Bewerken</button>
+        <button class="btn btn-danger btn-sm float-right product-delete-button" data-product="{{ product.id }}">Verwijderen</button>
+      </div>
+    </div>
+  </div>
+</div>

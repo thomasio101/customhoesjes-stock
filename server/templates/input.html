@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Product toevoegen</title>
+  </head>
+  <body>
+    <div>
+      <form method="POST">
+        {% for field in fields %}
+        {{ field }}
+        <input name="{{ field }}" value="{% if method == 'put' %}{{ getattr(product, field) }}{% endif %}"/><br/>
+        {% endfor %}
+        <input type="submit" value="Verzenden">
+      </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(
+      (documentReadyEvent) => $('form').on(
+        'submit', (formSubmitEvent) => {
+          formSubmitEvent.preventDefault()
+          $.ajax(
+            {
+              url: '/product{% if method == 'put' %}/{{ product.id }}{% endif %}',
+              method: '{{ method }}',
+              data: $('form').serialize()
+            }
+          )
+          {% if method == 'post' %}
+          $('form').trigger('reset')
+          {% endif %}
+        }
+      )
+    )
+    </script>
+  </body>
+</html>

@@ -14,7 +14,8 @@ class ProductMeta(type):
         return [
         "id",
         "name",
-        "description"
+        "description",
+        "stock"
         ]
 
     @property
@@ -244,7 +245,14 @@ def host_index():
 
 @app.route('/add-product')
 def host_add_product():
-    return render_template('add-product.html', fields=Product.fields)
+    return render_template('input.html', fields=Product.fields, method='post')
+
+@app.route('/product/<int:id>/update')
+def host_update_product(id):
+    try:
+        return render_template('input.html', fields=Product.fields, method='put', getattr=getattr, product=Product(id))
+    except ValueError as e:
+        return None, 404
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)

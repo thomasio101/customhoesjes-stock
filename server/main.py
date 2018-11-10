@@ -27,8 +27,11 @@ class ProductMeta(type):
 
             cursor.execute("SELECT id FROM products;")
 
-            for row in cursor.fetchall():
+            row = cursor.fetchone()
+
+            while row:
                 yield Product(*row)
+                row = cursor.fetchone()
         finally:
             try:
                 connection.close()

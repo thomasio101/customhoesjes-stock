@@ -5,6 +5,27 @@
     <title>Customhoesjes Voorraad</title>
   </head>
   <body>
+    <form>
+      <b>Pagina: </b>
+      <input name="page" type="number" value="{{ page }}"/><br/>
+      <b>Producten per pagina: </b>
+      <input name="products-per-page" type="number" value="{{ products_per_page }}"/><br/>
+      <input type="submit"/>
+    </form>
+    <div align="center">
+      {% if page != 1 %}
+      <form>
+        <input hidden name="page" value="{{ page - 1 }}"/>
+        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
+        <input type="submit" value="Vorige"/>
+      </form>
+      {% endif %}
+      <form>
+        <input hidden name="page" value="{{ page + 1 }}"/>
+        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
+        <input type="submit" value="Volgende"/>
+      </form>
+    </div>
     <ul>
       {% for product in products %}
       <li>

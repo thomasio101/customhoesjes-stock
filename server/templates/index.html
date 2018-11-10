@@ -35,5 +35,19 @@
       </li>
       {% endfor %}
     </ul>
+    <div align="center">
+      {% if page != 1 %}
+      <form>
+        <input hidden name="page" value="{{ page - 1 }}"/>
+        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
+        <input type="submit" value="Vorige"/>
+      </form>
+      {% endif %}
+      <form>
+        <input hidden name="page" value="{{ page + 1 }}"/>
+        <input hidden name="products-per-page" type="number" value="{{ products_per_page }}"/>
+        <input type="submit" value="Volgende"/>
+      </form>
+    </div>
   </body>
 </html>

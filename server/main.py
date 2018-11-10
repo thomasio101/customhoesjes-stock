@@ -30,7 +30,7 @@ class ProductMeta(type):
         finally:
             try:
                 connection.close()
-            except e:
+            except Exception as e:
                 raise e
 
 class Product(metaclass=ProductMeta):
@@ -58,7 +58,7 @@ class Product(metaclass=ProductMeta):
                 finally:
                     try:
                         connection.close()
-                    except e:
+                    except Exception as e:
                         raise e
         elif arg_count == len(Product.fields):
             try:
@@ -88,7 +88,7 @@ class Product(metaclass=ProductMeta):
                 finally:
                     try:
                         connection.close()
-                    except e:
+                    except Exception as e:
                         raise e
         else:
             raise ValueError("expected 1 or {} arguments, got {}".format(len(Product.fields), arg_count))
@@ -115,7 +115,7 @@ class Product(metaclass=ProductMeta):
         finally:
             try:
                 connection.close()
-            except e:
+            except Exception as e:
                 raise e
 
 def get_field_getter(field):
@@ -139,7 +139,7 @@ def get_field_getter(field):
         finally:
             try:
                 connection.close()
-            except e:
+            except Exception as e:
                 raise e
 
     return field_getter
@@ -168,7 +168,7 @@ def get_field_setter(field):
         finally:
             try:
                 connection.close()
-            except e:
+            except Exception as e:
                 raise e
 
     return field_setter

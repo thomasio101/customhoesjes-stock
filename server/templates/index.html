@@ -12,6 +12,11 @@
       <input name="products-per-page" type="number" value="{{ products_per_page }}"/><br/>
       <input type="submit"/>
     </form>
+    <form id="id-form">
+      <b>ID:</b><br/>
+      <input id="id-input" type="text"/>
+      <input type="submit"/>
+    </form>
     <div align="center">
       {% if page != 1 %}
       <form>
@@ -49,5 +54,19 @@
         <input type="submit" value="Volgende"/>
       </form>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(
+      (documentReadyEvent) => {
+        $('#id-form').submit(
+          (formSubmitEvent) => {
+            formSubmitEvent.preventDefault()
+            const id = $('#id-input').val()
+            window.location.href = `/product/${ id }/update`
+          }
+        )
+      }
+    )
+    </script>
   </body>
 </html>

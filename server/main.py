@@ -8,13 +8,15 @@ def get_db_connection():
     database="customhoesjes_stock"
     )
 
-product_fields = [
-"id",
-"name",
-"description"
-]
-
 class ProductMeta(type):
+    @property
+    def fields(self):
+        return [
+        "id",
+        "name",
+        "description"
+        ]
+
     @property
     def all(self):
         try:
@@ -58,7 +60,7 @@ class Product(metaclass=ProductMeta):
                         connection.close()
                     except e:
                         raise e
-        elif arg_count == len(product_fields):
+        elif arg_count == len(Product.fields):
             try:
                 self.id = int(args[0])
             except ValueError:
@@ -78,7 +80,7 @@ class Product(metaclass=ProductMeta):
                     else:
                         cursor.execute(
                         "INSERT INTO products({}) VALUES ({});"
-                        .format(",".join(product_fields), ",".join(['%s'] * len(product_fields))),
+                        .format(",".join(Product.fields), ",".join(['%s'] * len(Product.fields))),
                         args
                         )
 
@@ -89,7 +91,7 @@ class Product(metaclass=ProductMeta):
                     except e:
                         raise e
         else:
-            raise ValueError("expected 1 or {} arguments, got {}".format(len(product_fields), arg_count))
+            raise ValueError("expected 1 or {} arguments, got {}".format(len(Product.fields), arg_count))
 
     def delete(self):
         try:
@@ -171,7 +173,7 @@ def get_field_setter(field):
 
     return field_setter
 
-for field in product_fields:
+for field in Product.fields:
     if field != 'id':
         setattr(Product, field, property(
         get_field_getter(field),
@@ -186,7 +188,7 @@ class ProductResource(Resource):
         try:
             product = Product(id)
             return {
-            field: getattr(product, field) for field in product_fields
+            field: getattr(product, field) for field in Product.fields
             }
         except ValueError:
             return None, 404
@@ -197,7 +199,7 @@ class ProductResource(Resource):
             for key in request.form:
                 setattr(product, key, request.form[key])
             return {
-            field: getattr(product, field) for field in product_fields
+            field: getattr(product, field) for field in Product.fields
             }, 202
         except ValueError as e:
             return None, 404
@@ -213,14 +215,14 @@ class ProductsResource(Resource):
     def get(self):
         return [
         {
-        field: getattr(product, field) for field in product_fields
+        field: getattr(product, field) for field in Product.fields
         } for product in Product.all
         ]
     def post(self):
         try:
             product = Product(*request.form.values())
             return {
-            field: getattr(product, field) for field in product_fields
+            field: getattr(product, field) for field in Product.fields
             }, 201
         except ValueError as e:
             return None, 409
@@ -248,7 +250,7 @@ from flask import render_template
 
 @app.route('/add-product')
 def host_add_product():
-    return render_template('add-product.html', fields=product_fields)
+    return render_template('add-product.html', fields=Product.fields)
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)

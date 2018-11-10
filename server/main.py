@@ -16,6 +16,7 @@ class ProductMeta(type):
         "name",
         "description",
         "stock",
+        "wholesaler",
         "internal_id"
         ]
 

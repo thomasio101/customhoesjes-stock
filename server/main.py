@@ -236,17 +236,11 @@ api = Api(app)
 api.add_resource(ProductResource, '/product/<int:id>')
 api.add_resource(ProductsResource, '/product')
 
+from flask import render_template
+
 @app.route('/')
 def host_index():
-    with open('index.html') as index:
-        return index.read()
-
-@app.route('/main.js')
-def host_main_js():
-    with open('main.js') as main_js:
-        return main_js.read()
-
-from flask import render_template
+    return render_template('index.html', getattr=getattr, products=Product.all, fields=Product.fields)
 
 @app.route('/add-product')
 def host_add_product():

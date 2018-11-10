@@ -15,7 +15,8 @@ class ProductMeta(type):
         "id",
         "name",
         "description",
-        "stock"
+        "stock",
+        "internal_id"
         ]
 
     @property
